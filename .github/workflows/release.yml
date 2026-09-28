@@ -17,7 +17,6 @@ jobs:
         run: |
           GOOS=linux   GOARCH=amd64 go build -o serAD-linux-amd64   cmd/serAD/main.go
           GOOS=linux   GOARCH=arm64 go build -o serAD-linux-arm64   cmd/serAD/main.go
-          GOOS=windows GOARCH=amd64 go build -o serAD-windows.exe   cmd/serAD/main.go
           GOOS=darwin  GOARCH=amd64 go build -o serAD-macos-amd64   cmd/serAD/main.go
           GOOS=darwin  GOARCH=arm64 go build -o serAD-macos-arm64   cmd/serAD/main.go
       - name: Create Release
@@ -26,6 +25,5 @@ jobs:
           files: |
             serAD-linux-amd64
             serAD-linux-arm64
-            serAD-windows.exe
             serAD-macos-amd64
             serAD-macos-arm64
