@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type User struct {
 	SAMAccountName       string   `json:"sam_account_name"`
 	DN                   string   `json:"dn"`
@@ -8,6 +10,10 @@ type User struct {
 	AdminCount           int      `json:"admin_count"`
 	DontReqPreauth       bool     `json:"dont_req_preauth"`
 	Enabled              bool     `json:"enabled"`
+  LastLogon time.Time           `json:"last_logon"`
+  TrustedForDelegation bool     `json:"trusted_for_delegation"`
+  AllowedToDelegateTo  []string `json:"allowed_to_delegate_to"`
+  RBCDConfigured       bool     `json:"rbcd_configured"`
 }
 
 type Computer struct {
@@ -20,6 +26,7 @@ type Computer struct {
 	AllowedToActOnBehalf []string `json:"allowed_to_act_on_behalf,omitempty"`
 	RBCDConfigured       bool     `json:"rbcd_configured"`
 	Enabled              bool     `json:"enabled"`
+  LastLogon time.Time           `json:"last_logon"`
 }
 
 type CertificateTemplate struct {

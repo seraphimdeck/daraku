@@ -26,6 +26,8 @@ func (e *Engine) RunAll() []models.Finding {
 	findings = append(findings, e.DetectKerberoast()...)
 	findings = append(findings, e.DetectASREP()...)
 	findings = append(findings, e.DetectDelegation()...)
+  findings = append(findings, e.DetectAdminCount()...)
+  findings = append(findings, e.DetectStaleObjects()...)
 
 	return findings
 }
