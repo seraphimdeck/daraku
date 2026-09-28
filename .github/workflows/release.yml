@@ -1,4 +1,4 @@
-name: Release
+    name: Release
 
 on:
   push:
@@ -22,6 +22,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
+          overwrite: true
+          fail_on_unmatched_files: false
           files: |
             serAD-linux-amd64
             serAD-linux-arm64
