@@ -1,0 +1,15 @@
+serAD
+serAD-linux-amd64
+serAD-linux-arm64
+serAD-windows.exe
+serAD-macos-amd64
+serAD-macos-arm64
+
+audit_report.md
+audit_report.json
+
+*.test
+*.out
+
+.DS_Store
+Thumbs.db
