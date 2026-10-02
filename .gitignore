@@ -1,0 +1,17 @@
+daraku
+daraku-linux-amd64
+daraku-linux-arm64
+daraku-windows.exe
+daraku-macos-amd64
+daraku-macos-arm64
+
+audit_report.md
+audit_report.json
+rename.sh
+
+*.test
+*.out
+*.swp
+
+.DS_Store
+Thumbs.db
