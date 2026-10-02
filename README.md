@@ -26,4 +26,4 @@ To execute a standard audit scan:
 To export results directly to Markdown and JSON:
 ./daraku -target -user -pass  -dc-ip -o report.md -json report.json
 
-daraku is strictly a passive (read-only) audit tool performing LDAP queries and passive HTTP probes without modifying Active Directory objects or requesting certificates. Usage must comply with official permissions and applicable laws. Licensed under the MIT License.
+daraku is strictly a passive (read-only) audit tool performing LDAP queries and passive HTTP/HTTPS probes without modifying Active Directory objects or requesting certificates. Usage must comply with official permissions and applicable laws. Licensed under the MIT License.
