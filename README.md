@@ -3,7 +3,7 @@
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/coseraph)
 
 
-**daraku** (*Active Directory Audit Engine*) is a high-performance Active Directory (AD) and Active Directory Certificate Services (AD CS) audit tool written in Go. Designed for Blue Teams, Auditors, and Security Engineers, **daraku** focuses on passive (read-only) security assessments that are safe, fast, and contained, eliminating out-of-scope risks.
+**daraku** (*Active Directory Audit Tool*) is a high-performance Active Directory (AD) and Active Directory Certificate Services (AD CS) audit tool written in Go. Designed for Blue Teams, Auditors, and Security Engineers, **daraku** focuses on passive (read-only) security assessments that are safe, fast, and contained, eliminating out-of-scope risks.
 
 ## Features & Project Structure
 
