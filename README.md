@@ -21,9 +21,14 @@ Or install directly via:
 go install github.com/seraphimdeck/daraku/cmd/daraku@latest
 
 To execute a standard audit scan:
-./daraku -target -user -pass -dc-ip
+./daraku -target <domain/IP> -user <username> -pass <password> -dc-ip <DC_IP>
 
 To export results directly to Markdown and JSON:
-./daraku -target -user -pass  -dc-ip -o report.md -json report.json
+./daraku -target <domain/IP> -user <username> -pass <password>  -dc-ip <DC_IP> -o report.md -json report.json
 
 daraku is strictly a passive (read-only) audit tool performing LDAP queries and passive HTTP/HTTPS probes without modifying Active Directory objects or requesting certificates. Usage must comply with official permissions and applicable laws. Licensed under the MIT License.
+
+## Contributing & Support
+
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+​If you find this project useful and want to support its development, feel free to buy me a coffee
