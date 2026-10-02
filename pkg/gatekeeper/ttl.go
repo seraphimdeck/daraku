@@ -17,7 +17,7 @@ func (g *Gatekeeper) CheckTTL() error {
 		Timeout: 2 * time.Second,
 		Control: func(network, address string, c syscall.RawConn) error {
 			return c.Control(func(fd uintptr) {
-				err := syscall.SetsockoptInt(int(fd), syscall.IPPROTO_IP, syscall.IP_TTL, 1)
+				err := setIPTLSocketOption(fd)
 				if err != nil {
 					controlErr = fmt.Errorf("gagal mengkonfigurasi IP_TTL=1: %w", err)
 				}
