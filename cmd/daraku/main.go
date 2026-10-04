@@ -25,7 +25,7 @@ const (
 	Bold   = "\033[1m"
 )
 
-const Version = "1.1.6"
+const Version = "1.1.7"
 const Banner = `
   ___   _   ___   _   _  _ _   _ 
  |   \ /_\ | _ \ /_\ | |/ / | | |
