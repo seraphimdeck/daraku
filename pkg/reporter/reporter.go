@@ -28,3 +28,6 @@ type JSONReporter struct {
 func (j *JSONReporter) Generate(findings []models.Finding, meta models.AuditMetadata) error {
 	return ExportJSON(j.FilePath, findings, meta)
 }
+
+
+// this file, over-engineering i guess lol

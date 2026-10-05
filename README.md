@@ -13,7 +13,7 @@
 ## Features & Project Structure
 
 - Safety Gatekeeper: Validates target IPs against RFC1918 boundaries, local subnets, and enforces TTL=1 restrictions before connecting.
-- Zero-Dependency & Fast: Compiles into a single static binary running natively on Linux, macOS and Windows without Python or .NET runtimes.
+- Zero-Dependency & Fast: Compiles into a single static binary running natively on Linux and Windows without Python or .NET runtimes.
 - AD & AD CS Detection: Identifies ESC1, ESC2, ESC3, ESC4, ESC6, ESC7, ESC8, ESC11 Kerberoasting, AS-REP Roasting, and Delegation risks (Unconstrained, Constrained, RBCD).
 - Interface-Driven Reporter: Supports Terminal, Markdown, and JSON.
 

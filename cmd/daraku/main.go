@@ -26,7 +26,7 @@ const (
 	Bold   = "\033[1m"
 )
 
-const Version = "1.1.8"
+const Version = "1.1.9"
 const Banner = `
   ___   _   ___   _   _  _ _   _ 
  |   \ /_\ | _ \ /_\ | |/ / | | |
@@ -45,6 +45,7 @@ type Config struct {
 	Password      string
 	OutMD         string
 	OutJSON       string
+  Timeout       int
 }
 
 func main() {
@@ -56,6 +57,7 @@ func main() {
 	bindDN := flag.String("user", "", "Bind DN atau Username LDAP")
 	password := flag.String("pass", "", "Password otentikasi LDAP")
 	passwordStdin := flag.Bool("password-stdin", false, "Baca password dari Stdin")
+  timeout := flag.Int("timeout", 15, "Timeout query LDAP dalam detik")
 	outMD := flag.String("out-md", "audit_report.md", "Path file output laporan Markdown")
 	outJSON := flag.String("out-json", "audit_report.json", "Path file output laporan JSON")
 	showVersion := flag.Bool("version", false, "Tampilkan versi")
@@ -77,6 +79,7 @@ func main() {
 		Password:      *password,
 		OutMD:         *outMD,
 		OutJSON:       *outJSON,
+    Timeout:       *timeout,
 	}
 
 	if *passwordStdin {
@@ -189,6 +192,7 @@ func printOptions(cfg Config) {
 	fmt.Printf("  %-15s %-25t %s\n", "insecure-tls", cfg.InsecureTLS, "Abaikan verifikasi sertifikat TLS")
 	fmt.Printf("  %-15s %-25s %s\n", "out-md", cfg.OutMD, "Path file output laporan Markdown")
 	fmt.Printf("  %-15s %-25s %s\n", "out-json", cfg.OutJSON, "Path file output laporan JSON")
+  fmt.Printf("  %-15s %-25d %s\n", "timeout", cfg.Timeout, "Timeout limit untuk LDAP query (detik)")
 	fmt.Println()
 }
 
@@ -222,6 +226,13 @@ func setOption(cfg *Config, opt string, val string) {
 	case "out-json":
 		cfg.OutJSON = val
 		fmt.Printf("out-json => %s\n", val)
+  case "timeout":
+		if t, err := strconv.Atoi(val); err == nil {
+			cfg.Timeout = t
+			fmt.Printf("timeout => %d\n", t)
+		} else {
+			fmt.Println("[!] Nilai timeout harus berupa angka")
+		}
 	default:
 		fmt.Printf("[!] Error: %s. Gunakan 'show options'.\n", opt)
 	}
@@ -231,6 +242,7 @@ func executeAudit(cfg Config) {
 	if cfg.InsecureTLS && !cfg.UseTLS {
 		log.Println("[WARN] -insecure-tls hanya valid bersama -tls")
 	}
+  
 
 	hostname, _ := os.Hostname()
 	meta := models.AuditMetadata{
@@ -253,7 +265,7 @@ func executeAudit(cfg Config) {
 	if !cfg.UseTLS {
 		fmt.Printf("%s[WARN] LDAP bind menggunakan koneksi plaintext. Pertimbangkan penggunaan TLS.%s\n", Yellow, Reset)
 	}
-	client, err := ldap.NewClient(cfg.TargetIP, cfg.Port, cfg.UseTLS, cfg.InsecureTLS, cfg.TLSServerName, cfg.BindDN, cfg.Password)
+	client, err := ldap.NewClient(cfg.TargetIP, cfg.Port, cfg.UseTLS, cfg.InsecureTLS, cfg.TLSServerName, cfg.BindDN, cfg.Password, cfg.Timeout,)
 	if err != nil {
 		fmt.Printf("%s[FATAL] Koneksi LDAP GAGAL: %v%s\n", Bold+Red, err, Reset)
 		return

@@ -1,5 +1,5 @@
-//go:build !windows
-// +build !windows
+//go:build linux
+
 package gatekeeper
 
 import "syscall"

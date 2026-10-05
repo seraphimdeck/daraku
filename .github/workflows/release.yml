@@ -28,10 +28,6 @@ jobs:
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o daraku-linux-amd64 $ENTRY_POINT
           CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o daraku-linux-arm64 $ENTRY_POINT
 
-          # macOS
-          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o daraku-macos-amd64 $ENTRY_POINT
-          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o daraku-macos-arm64 $ENTRY_POINT
-
           # Windows
           CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o daraku-windows-amd64.exe $ENTRY_POINT
 
@@ -42,6 +38,4 @@ jobs:
           files: |
             daraku-linux-amd64
             daraku-linux-arm64
-            daraku-macos-amd64
-            daraku-macos-arm64
             daraku-windows-amd64.exe

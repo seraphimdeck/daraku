@@ -10,9 +10,10 @@ type Client struct {
 	Conn     *ldap.Conn
 	BaseDN   string
 	ConfigDN string
+  Timeout  int
 }
 
-func NewClient(server string, port int, useTLS, insecureTLS bool, tlsServerName, bindDN, password string) (*Client, error) {
+func NewClient(server string, port int, useTLS, insecureTLS bool, tlsServerName, bindDN, password string, timeout int) (*Client, error) {
 	addr := fmt.Sprintf("%s:%d", server, port)
 	var conn *ldap.Conn
 	var err error
@@ -44,7 +45,7 @@ func NewClient(server string, port int, useTLS, insecureTLS bool, tlsServerName,
 		"",
 		ldap.ScopeBaseObject,
 		ldap.NeverDerefAliases,
-		0, 0, false,
+		0, timeout, false,
 		"(objectClass=*)",
 		[]string{"defaultNamingContext", "configurationNamingContext"},
 		nil,
@@ -70,6 +71,7 @@ func NewClient(server string, port int, useTLS, insecureTLS bool, tlsServerName,
 		Conn:     conn,
 		BaseDN:   baseDN,
 		ConfigDN: configDN,
+    Timeout : timeout,
 	}, nil
 }
 

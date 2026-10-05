@@ -10,7 +10,7 @@ func (c *Client) SearchPaged(baseDN, filter string, attributes []string, pageSiz
 		baseDN,
 		ldap.ScopeWholeSubtree,
 		ldap.NeverDerefAliases,
-		0, 0, false,
+		0, c.Timeout, false,
 		filter,
 		attributes,
 		nil,
