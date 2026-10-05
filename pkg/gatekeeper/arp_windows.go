@@ -1,22 +1,56 @@
 //go:build windows
+// +build windows
 
 package gatekeeper
 
 import (
 	"fmt"
 	"net"
+	"syscall"
 	"unsafe"
-	"golang.org/x/sys/windows"
 )
 
+var (
+	iphlpapi           = syscall.NewLazyDLL("iphlpapi.dll")
+	procGetIpNetTable2 = iphlpapi.NewProc("GetIpNetTable2")
+	procFreeMibTable   = iphlpapi.NewProc("FreeMibTable")
+)
+
+type MIB_IP_ROW_ADDRESS struct {
+	Family uint16
+	Data   [24]byte
+}
+
+type MIB_IPNET_ROW2 struct {
+	Address               MIB_IP_ROW_ADDRESS
+	InterfaceIndex        uint32
+	InterfaceLuid         uint64
+	PhysicalAddress       [8]byte
+	PhysicalAddressLength uint32
+	State                 uint32
+	Flags                 uint32
+	ReachabilityTime      uint32
+}
+
+type MIB_IPNET_TABLE2 struct {
+	NumEntries uint32
+	Table      [1]MIB_IPNET_ROW2
+}
+
 func (g *Gatekeeper) CheckARP() error {
-	var table *windows.MIB_IPNET_TABLE2
-	
-	err := windows.GetIpNetTable2(windows.AF_INET, &table)
-	if err != nil {
-		return fmt.Errorf("gagal mengeksekusi GetIpNetTable2: %w", err)
+	var table *MIB_IPNET_TABLE2
+
+	r1, _, _ := procGetIpNetTable2.Call(
+		uintptr(2),
+		uintptr(unsafe.Pointer(&table)),
+	)
+
+	if r1 != 0 {
+		return fmt.Errorf("gagal mengeksekusi GetIpNetTable2, kode error: %v", r1)
 	}
-	defer windows.FreeMibTable(table)
+	if table != nil {
+		defer procFreeMibTable.Call(uintptr(unsafe.Pointer(table)))
+	}
 
 	targetIP := net.ParseIP(g.TargetIP)
 	if targetIP == nil {
@@ -24,24 +58,26 @@ func (g *Gatekeeper) CheckARP() error {
 	}
 
 	found := false
-	rows := unsafe.Slice(&table.Table[0], table.NumEntries)
+	if table != nil && table.NumEntries > 0 {
+		rows := unsafe.Slice(&table.Table[0], int(table.NumEntries))
 
-	for _, row := range rows {
-		addr := (*windows.RawSockaddrInet4)(unsafe.Pointer(&row.Address))
-		ip := net.IPv4(addr.Addr[0], addr.Addr[1], addr.Addr[2], addr.Addr[3])
+		for _, row := range rows {
+			rawIP := row.Address.Data[2:6]
+			ip := net.IPv4(rawIP[0], rawIP[1], rawIP[2], rawIP[3])
 
-		if ip.Equal(targetIP) {
-			isEmpty := true
-			for i := uint32(0); i < row.PhysicalAddressLength; i++ {
-				if row.PhysicalAddress[i] != 0 {
-					isEmpty = false
+			if ip.Equal(targetIP) {
+				isEmpty := true
+				for i := uint32(0); i < row.PhysicalAddressLength; i++ {
+					if row.PhysicalAddress[i] != 0 {
+						isEmpty = false
+						break
+					}
+				}
+
+				if !isEmpty {
+					found = true
 					break
 				}
-			}
-
-			if !isEmpty {
-				found = true
-				break
 			}
 		}
 	}

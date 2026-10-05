@@ -2,10 +2,7 @@ module github.com/seraphimdeck/daraku
 
 go 1.26.0
 
-require (
-	github.com/go-ldap/ldap/v3 v3.4.14
-	golang.org/x/sys v0.48.0
-)
+require github.com/go-ldap/ldap/v3 v3.4.14
 
 require (
 	github.com/Azure/go-ntlmssp v0.1.1 // indirect
