@@ -5,8 +5,6 @@ import (
 )
 
 func TestParseSID(t *testing.T) {
-	// Representasi byte valid untuk SID: S-1-5-32-544 (Builtin Administrators)
-	// Format: Revision (1 byte), SubAuthCount (1 byte), IdentifierAuthority (6 bytes), SubAuthorities (4 bytes each)
 	validSIDBytes := []byte{
 		0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, // Header + Authority
 		0x20, 0x00, 0x00, 0x00, // 32 (Little Endian)
@@ -65,7 +63,6 @@ func TestParseSID(t *testing.T) {
 				if sid.String() != tt.expectedStr {
 					t.Errorf("Diharapkan string SID %s, tetapi mendapatkan %s", tt.expectedStr, sid.String())
 				}
-				// Memvalidasi fungsi Len() yang Anda pertahankan
 				expectedLen := 8 + int(sid.SubAuthorityCount)*4
 				if sid.Len() != expectedLen {
 					t.Errorf("Diharapkan Len() %d, tetapi mendapatkan %d", expectedLen, sid.Len())

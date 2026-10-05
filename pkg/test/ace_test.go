@@ -26,7 +26,6 @@ func TestIsWellKnownAdminSID(t *testing.T) {
 }
 
 func TestEvaluateVulnerability(t *testing.T) {
-	// Membuat GUID tiruan untuk ManageCA
 	manageCAGUID := &GUID{
 		Data1: 0x7911c0fc, Data2: 0x6034, Data3: 0x11d3,
 		Data4: [8]byte{0xa6, 0xda, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b},
@@ -45,7 +44,8 @@ func TestEvaluateVulnerability(t *testing.T) {
 				Type:       ACCESS_ALLOWED_ACE_TYPE,
 				AccessMask: RIGHT_GENERIC_ALL,
 			},
-			targetSID: "S-1-5-21-123-512", // Domain Admin
+      //high privilege user
+			targetSID: "S-1-5-21-123-512",
 			wantESC4:  false,
 			wantESC7:  false,
 		},
@@ -55,7 +55,8 @@ func TestEvaluateVulnerability(t *testing.T) {
 				Type:       ACCESS_ALLOWED_ACE_TYPE,
 				AccessMask: RIGHT_WRITE_DACL,
 			},
-			targetSID: "S-1-5-21-123-1001", // Normal User
+      //low privilege user
+			targetSID: "S-1-5-21-123-1001", //
 			wantESC4:  true,
 			wantESC7:  false,
 		},

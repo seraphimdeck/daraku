@@ -6,7 +6,6 @@ import (
 )
 
 func TestDetectAdminCount(t *testing.T) {
-	// Menyiapkan data mock Users dengan berbagai skenario kerentanan
 	mockUsers := []models.User{
 		{
 			SAMAccountName:       "Admin_Kerberoastable",
@@ -37,16 +36,13 @@ func TestDetectAdminCount(t *testing.T) {
 		},
 	}
 
-	// Inisialisasi engine hanya dengan data users
 	engine := NewEngine(mockUsers, nil, nil, nil)
 	findings := engine.DetectAdminCount()
 
-	// Kita mengharapkan tepat 2 temuan dari 4 user di atas
 	if len(findings) != 2 {
-		t.Fatalf("Diharapkan 2 temuan, tetapi mendapatkan %d", len(findings))
+		t.Fatalf("mendapatkan %d", len(findings))
 	}
 
-	// Validasi identitas temuan
 	foundKerberoast := false
 	foundASREP := false
 
@@ -73,13 +69,13 @@ func TestDetectASREP(t *testing.T) {
 			SAMAccountName: "User_ASREP_Roastable",
 			Enabled:        true,
 			AdminCount:     0,
-			DontReqPreauth: true, // Rentan
+			DontReqPreauth: true,
 		},
 		{
 			SAMAccountName: "User_Safe",
 			Enabled:        true,
 			AdminCount:     0,
-			DontReqPreauth: false, // Aman
+			DontReqPreauth: false,
 		},
 	}
 
@@ -87,10 +83,10 @@ func TestDetectASREP(t *testing.T) {
 	findings := engine.DetectASREP()
 
 	if len(findings) != 1 {
-		t.Fatalf("Diharapkan 1 temuan AS-REP, mendapatkan %d", len(findings))
+		t.Fatalf("mendapatkan %d", len(findings))
 	}
 
 	if findings[0].ID != "ASREP_ROAST" || findings[0].AffectedEntity != "User_ASREP_Roastable" {
-		t.Errorf("Deteksi ASREP salah sasaran: %s", findings[0].AffectedEntity)
+		t.Errorf("Error: %s", findings[0].AffectedEntity)
 	}
 }
